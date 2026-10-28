@@ -29,7 +29,7 @@ double calc_Q(double X)
     return Q;
 }
 
-void check_control(double Q)
+int check_control(double Q)
 {
     double Q0 = 45.00;
     double q_min8 = Q0 * 0.92;
@@ -37,21 +37,17 @@ void check_control(double Q)
     double q_min15 = Q0 * 0.85;
     double q_max15 = Q0 * 1.15;
 
-    printf("Оперативный контроль:\n");
-    printf("Допустимый диапазон (8%%): [%.2f ; %.2f]\n", q_min8, q_max8);
-    printf("Текущее состояние системы : ");
-
     if (Q >= q_min8 && Q <= q_max8)
     {
-        printf("НОРМА\n");
+        return 1;
     }
     else if (Q >= q_min15 && Q <= q_max15)
     {
-        printf("ПРЕДУПРЕЖДЕНИЕ\n");
+        return 2;
     }
     else
     {
-        printf("ТРЕВОГА\n");
+        return 3;
     }
 }
 
@@ -88,7 +84,23 @@ int main()
         printf("Результаты расчета:\n");
         printf("Значение показателя Q       = %.2f\n", Q);
         printf("-------------------------------------------------------------\n");
-        check_control(Q);
+        int state = check_control(Q);
+        printf("Оперативный контроль:\n");
+        printf("Допустимый диапазон (8%%): [41.40 ; 48.60]\n");
+        printf("Текущее состояние системы : ");
+
+        if (state == 1)
+        {
+            printf("НОРМА\n");
+        }
+        else if (state == 2)
+        {
+            printf("ПРЕДУПРЕЖДЕНИЕ\n");
+        }
+        else
+        {
+            printf("ТРЕВОГА\n");
+        }
     }
     printf("=============================================================\n");
     double q_array[50] = { 0 };
